@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"runtime"
 
 	"github.com/google/generative-ai-go/genai"
 	"github.com/joho/godotenv"
@@ -13,7 +15,12 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		panic("failed to get caller information")
+	}
+	dir := filepath.Dir(filename)
+	err := godotenv.Load(filepath.Join(dir, ".env"))
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
